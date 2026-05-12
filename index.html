@@ -2,23 +2,22 @@
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
-    <title>ETF 全環境策略模擬器 | V_Hierophant</title>
+    <title>ETF 策略模擬器 | 專家導讀版</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         body { font-family: 'Segoe UI', sans-serif; background: #eceff1; display: flex; justify-content: center; padding: 20px; }
-        .container { background: white; padding: 25px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); width: 100%; max-width: 1100px; }
+        .container { background: white; padding: 25px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); width: 100%; max-width: 1000px; }
         .main-layout { display: flex; gap: 20px; flex-wrap: wrap; }
         .controls { flex: 1; min-width: 320px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
         .full-width { grid-column: span 2; }
-        .chart-container { flex: 1.5; min-width: 350px; height: 450px; position: relative; }
-        .control-item { background: #f8f9fa; padding: 12px; border-radius: 10px; border: 1px solid #eee; }
+        .chart-container { flex: 1.5; min-width: 350px; height: 400px; position: relative; }
+        .control-item { background: #f8f9fa; padding: 10px; border-radius: 10px; border: 1px solid #eee; }
         label { display: block; font-weight: bold; color: #455a64; margin-bottom: 5px; font-size: 0.85em; }
         input[type="range"] { width: 100%; cursor: pointer; }
         .val-tag { float: right; color: #00796b; font-weight: bold; }
         .result-panel { grid-column: span 2; text-align: center; margin-top: 10px; padding: 15px; background: #263238; color: white; border-radius: 10px; }
-        .final-sum { font-size: 1.3em; color: #4db6ac; font-weight: bold; }
-        .power-sum { font-size: 1.1em; color: #ffab91; font-style: italic; }
-        .strategy-box { margin-top: 20px; border-left: 5px solid #00796b; background: #f1f8f7; padding: 15px; border-radius: 5px; font-size: 0.9em; }
+        .final-sum { font-size: 1.4em; color: #4db6ac; font-weight: bold; }
+        .strategy-box { margin-top: 20px; border-left: 5px solid #00796b; background: #f1f8f7; padding: 15px; border-radius: 5px; min-height: 80px; }
     </style>
 </head>
 <body>
@@ -28,15 +27,13 @@
             <div class="controls">
                 <div class="control-item"><label>本金 (NT$): <span id="v1" class="val-tag"></span></label><input type="range" id="initSum" min="0" max="1000000" step="10000" value="100000"></div>
                 <div class="control-item"><label>每月投入 (NT$): <span id="v2" class="val-tag"></span></label><input type="range" id="monthly" min="0" max="100000" step="1000" value="3000"></div>
-                <div class="control-item"><label>預期報酬 (%): <span id="v3" class="val-tag"></span></label><input type="range" id="rate" min="1" max="15" step="0.1" value="3"></div>
+                <div class="control-item"><label>預期報酬 (%): <span id="v3" class="val-tag"></span></label><input type="range" id="rate" min="1" max="15" step="0.5" value="5"></div>
                 <div class="control-item"><label>投資年限 (年): <span id="v4" class="val-tag"></span></label><input type="range" id="years" min="1" max="40" step="1" value="5"></div>
-                <div class="control-item" style="background: #fff3e0;"><label>內扣費用 (%): <span id="v5" class="val-tag"></span></label><input type="range" id="cost" min="0" max="3" step="0.05" value="0.5"></div>
-                <div class="control-item" style="background: #fff3e0;"><label>通貨膨脹 (%): <span id="v6" class="val-tag"></span></label><input type="range" id="inflation" min="0" max="8" step="0.1" value="2"></div>
-                <div class="control-item full-width" style="background: #fbe9e7;"><label>預估獲利稅率 (%): <span id="v7" class="val-tag"></span></label><input type="range" id="tax" min="0" max="40" step="1" value="10"></div>
-                
+                <div class="control-item" style="background: #fff3e0;"><label>內扣費用 (%): <span id="v5" class="val-tag"></span></label><input type="range" id="cost" min="0" max="2.5" step="0.05" value="0.5"></div>
+                <div class="control-item" style="background: #fff3e0;"><label>通貨膨脹 (%): <span id="v6" class="val-tag"></span></label><input type="range" id="inflation" min="0" max="5" step="0.1" value="2"></div>
                 <div class="result-panel">
                     帳面總資產：<span id="finalTotal" class="final-sum"></span><br>
-                    <span class="power-sum">實質購買力 (考慮通膨後)：<span id="realPower"></span></span>
+                    <small>實質購買力：<span id="realPower" style="color:#ffab91"></span></small>
                 </div>
             </div>
             <div class="chart-container"><canvas id="myChart"></canvas></div>
@@ -51,74 +48,52 @@
         function update() {
             const initSum = parseInt(document.getElementById('initSum').value);
             const monthly = parseInt(document.getElementById('monthly').value);
-            const rate = parseFloat(document.getElementById('rate').value) / 100 / 12;
-            const cost = parseFloat(document.getElementById('cost').value) / 100 / 12;
-            const inflation = parseFloat(document.getElementById('inflation').value) / 100 / 12;
-            const taxRate = parseFloat(document.getElementById('tax').value) / 100;
+            const rawRate = parseFloat(document.getElementById('rate').value);
+            const rawCost = parseFloat(document.getElementById('cost').value);
+            const rawInf = parseFloat(document.getElementById('inflation').value);
             const years = parseInt(document.getElementById('years').value);
             
+            const netRate = (rawRate - rawCost) / 100 / 12;
+            const infRate = rawInf / 100 / 12;
+
             document.getElementById('v1').innerText = initSum.toLocaleString();
             document.getElementById('v2').innerText = monthly.toLocaleString();
-            document.getElementById('v3').innerText = document.getElementById('rate').value + '%';
+            document.getElementById('v3').innerText = rawRate + '%';
             document.getElementById('v4').innerText = years;
-            document.getElementById('v5').innerText = document.getElementById('cost').value + '%';
-            document.getElementById('v6').innerText = document.getElementById('inflation').value + '%';
-            document.getElementById('v7').innerText = document.getElementById('tax').value + '%';
+            document.getElementById('v5').innerText = rawCost + '%';
+            document.getElementById('v6').innerText = rawInf + '%';
 
             let nominalData = [];
             let realData = [];
             let labels = [];
-            let nominalCurrent = initSum;
-            let realCurrent = initSum;
-            let totalInvested = initSum;
+            let currentNominal = initSum;
 
             for (let i = 0; i <= years; i++) {
                 labels.push('第' + i + '年');
-                // 處理稅務邏輯：僅對獲利部分計算稅額（簡化模擬）
-                let profit = nominalCurrent - totalInvested;
-                let nominalAfterTax = nominalCurrent - (profit > 0 ? profit * taxRate : 0);
-                
-                nominalData.push(Math.round(nominalAfterTax));
-                // 實質購買力：將帳面金額除以通膨係數
-                realData.push(Math.round(nominalAfterTax / Math.pow(1 + inflation * 12, i)));
-
+                nominalData.push(Math.round(currentNominal));
+                realData.push(Math.round(currentNominal / Math.pow(1 + rawInf/100, i)));
                 for (let m = 0; m < 12; m++) {
-                    nominalCurrent = (nominalCurrent + monthly) * (1 + rate - cost);
-                    totalInvested += monthly;
+                    currentNominal = (currentNominal + monthly) * (1 + netRate);
                 }
             }
 
             document.getElementById('finalTotal').innerText = 'NT$ ' + nominalData[nominalData.length-1].toLocaleString();
             document.getElementById('realPower').innerText = 'NT$ ' + realData[realData.length-1].toLocaleString();
 
-            // --- 優化後的導讀邏輯 ---
-            let insightText = "<b>[策略診斷報告]</b><br>";
-            const realReturn = (rawRate - cost - parseFloat(document.getElementById('inflation').value));
+            // --- 細緻化導讀邏輯 ---
+            let insight = "<b>[策略診斷報告]</b><br>";
+            const realReturn = rawRate - rawCost - rawInf;
 
-            // 1. 成本檢查
-            if (cost > 1.2) {
-                insightText += "❌ <b>費用過高：</b>這支 ETF 的內扣成本太重了，長期會吃掉你約 20-30% 的潛在獲利。<br>";
-            } else if (cost < 0.3) {
-                insightText += "✅ <b>優質成本：</b>極低的摩擦力，讓你的每一分錢都有效地進入複利循環。<br>";
-            }
-            
-            // 2. 實質購買力檢查
-            if (realReturn <= 0) {
-                insightText += "⚠️ <b>負成長預警：</b>你的報酬率跟不上通膨與成本，這意味著雖然數字變多，但未來能買的東西反而變少了。<br>";
-            } else if (realReturn < 3) {
-                insightText += "💡 <b>平庸陷阱：</b>實質增長僅有 " + realReturn.toFixed(1) + "%，資產僅能緩慢爬行，建議優化標的。<br>";
-            }
-            
-            // 3. 時間與波動檢查
-            if (years < 15) {
-                insightText += "⏳ <b>時間維度不足：</b>複利尚未進入噴發期，這段期間『本金大小』比報酬率更重要。<br>";
-            } else if (rawRate > 10) {
-                insightText += "🎢 <b>高空行走：</b>追求 10% 以上高報酬代表過程將極度顛簸，請確保不會在半路驚慌下車。<br>";
-            } else {
-                insightText += "🎯 <b>黃金配置：</b>合理的報酬與時間安排，只要維持紀律，成功的機率極高。";
-            }
-            
-            document.getElementById('insight').innerHTML = insightText;
+            if (rawCost > 1.2) insight += "❌ <b>費用黑洞：</b>您的內扣費用過高，將吞噬約 1/4 的潛在財富。<br>";
+            else if (rawCost < 0.4) insight += "✅ <b>低摩擦運行：</b>費用極低，複利引擎運作效率極高。<br>";
+
+            if (realReturn <= 0) insight += "⚠️ <b>購買力警報：</b>報酬率跑輸通膨與成本，您的錢正在悄悄縮水！<br>";
+            else if (realReturn < 3) insight += "💡 <b>增長遲緩：</b>實質增長僅 " + realReturn.toFixed(1) + "%，需增加本金或優化標的。<br>";
+
+            if (years < 15) insight += "⏳ <b>時間維度短：</b>目前資產增長主要靠『存錢』而非『複利』。<br>";
+            else insight += "🎯 <b>時間紅利：</b>長期持有讓複利斜率明顯上揚，成功的機率極高。";
+
+            document.getElementById('insight').innerHTML = insight;
 
             if (myChart) myChart.destroy();
             myChart = new Chart(ctx, {
@@ -126,7 +101,7 @@
                 data: {
                     labels: labels,
                     datasets: [
-                        { label: '帳面價值(稅後)', data: nominalData, borderColor: '#00796b', fill: false, tension: 0.2 },
+                        { label: '帳面金額', data: nominalData, borderColor: '#00796b', fill: false, tension: 0.2 },
                         { label: '實質購買力', data: realData, borderColor: '#ff8a65', borderDash: [5, 5], fill: false, tension: 0.2 }
                     ]
                 },
