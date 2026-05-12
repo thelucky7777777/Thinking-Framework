@@ -2,44 +2,46 @@
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
-    <title>ETF 複利魔法模擬器</title>
+    <title>ETF 全環境策略模擬器 | V_Hierophant</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        body { font-family: sans-serif; background: #f4f7f6; display: flex; justify-content: center; padding: 20px; }
-        .card { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); width: 100%; max-width: 800px; }
-        h1 { color: #2c3e50; text-align: center; }
-        .control-group { margin-bottom: 20px; }
-        label { display: block; margin-bottom: 8px; font-weight: bold; color: #34495e; }
+        body { font-family: 'Segoe UI', sans-serif; background: #eceff1; display: flex; justify-content: center; padding: 20px; }
+        .container { background: white; padding: 25px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); width: 100%; max-width: 1100px; }
+        .main-layout { display: flex; gap: 20px; flex-wrap: wrap; }
+        .controls { flex: 1; min-width: 320px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .full-width { grid-column: span 2; }
+        .chart-container { flex: 1.5; min-width: 350px; height: 450px; position: relative; }
+        .control-item { background: #f8f9fa; padding: 12px; border-radius: 10px; border: 1px solid #eee; }
+        label { display: block; font-weight: bold; color: #455a64; margin-bottom: 5px; font-size: 0.85em; }
         input[type="range"] { width: 100%; cursor: pointer; }
-        .value-display { text-align: right; color: #3498db; font-weight: bold; font-size: 1.2em; }
-        .result { background: #e8f4fd; padding: 20px; border-radius: 10px; text-align: center; margin-top: 20px; }
-        .result-val { font-size: 2em; color: #2980b9; font-weight: bold; }
+        .val-tag { float: right; color: #00796b; font-weight: bold; }
+        .result-panel { grid-column: span 2; text-align: center; margin-top: 10px; padding: 15px; background: #263238; color: white; border-radius: 10px; }
+        .final-sum { font-size: 1.3em; color: #4db6ac; font-weight: bold; }
+        .power-sum { font-size: 1.1em; color: #ffab91; font-style: italic; }
+        .strategy-box { margin-top: 20px; border-left: 5px solid #00796b; background: #f1f8f7; padding: 15px; border-radius: 5px; font-size: 0.9em; }
     </style>
 </head>
 <body>
-    <div class="card">
-        <h1>🌱<svg xmlns="http://www.w3.org/2000/svg" height="48px" viewBox="0 -960 960 960" width="48px" fill="#e3e3e3"><path d="M314-228h50v-88h88v-50h-88v-88h-50v88h-88v50h88v88Zm215-35h201v-49H529v49Zm0-107h201v-50H529v50Zm37-163 61-61 61 61 36-36-61-61 61-61-36-36-61 61-61-61-36 36 61 61-61 61 36 36Zm-325-72h196v-50H241v50Zm-61 485q-24 0-42-18t-18-42v-600q0-24 18-42t42-18h600q24 0 42 18t18 42v600q0 24-18 42t-42 18H180Zm0-60h600v-600H180v600Zm0-600v600-600Z"/></svg> ETF 複利魔法模擬器</h1>
-        <div class="control-group">
-            <label>初始本金 (NT$): <span id="v1" class="value-display">100,000</span></label>
-            <input type="range" id="initSum" min="0" max="1000000" step="10000" value="100000">
+    <div class="container">
+        <h1>📊 ETF 全環境投資模擬器</h1>
+        <div class="main-layout">
+            <div class="controls">
+                <div class="control-item"><label>本金 (NT$): <span id="v1" class="val-tag"></span></label><input type="range" id="initSum" min="0" max="1000000" step="10000" value="100000"></div>
+                <div class="control-item"><label>每月投入 (NT$): <span id="v2" class="val-tag"></span></label><input type="range" id="monthly" min="0" max="100000" step="1000" value="10000"></div>
+                <div class="control-item"><label>預期報酬 (%): <span id="v3" class="val-tag"></span></label><input type="range" id="rate" min="1" max="15" step="0.5" value="7"></div>
+                <div class="control-item"><label>投資年限 (年): <span id="v4" class="val-tag"></span></label><input type="range" id="years" min="1" max="40" step="1" value="20"></div>
+                <div class="control-item" style="background: #fff3e0;"><label>內扣費用 (%): <span id="v5" class="val-tag"></span></label><input type="range" id="cost" min="0" max="2.5" step="0.05" value="0.5"></div>
+                <div class="control-item" style="background: #fff3e0;"><label>通貨膨脹 (%): <span id="v6" class="val-tag"></span></label><input type="range" id="inflation" min="0" max="5" step="0.1" value="2"></div>
+                <div class="control-item full-width" style="background: #fbe9e7;"><label>預估獲利稅率 (%): <span id="v7" class="val-tag"></span></label><input type="range" id="tax" min="0" max="40" step="1" value="10"></div>
+                
+                <div class="result-panel">
+                    帳面總資產：<span id="finalTotal" class="final-sum"></span><br>
+                    <span class="power-sum">實質購買力 (考慮通膨後)：<span id="realPower"></span></span>
+                </div>
+            </div>
+            <div class="chart-container"><canvas id="myChart"></canvas></div>
         </div>
-        <div class="control-group">
-            <label>每月投入金額 (NT$): <span id="v2" class="value-display">10,000</span></label>
-            <input type="range" id="monthly" min="0" max="100000" step="1000" value="10000">
-        </div>
-        <div class="control-group">
-            <label>預期年化報酬率 (%): <span id="v3" class="value-display">7%</span></label>
-            <input type="range" id="rate" min="1" max="15" step="0.5" value="7">
-        </div>
-        <div class="control-group">
-            <label>投資年限 (年): <span id="v4" class="value-display">20</span></label>
-            <input type="range" id="years" min="1" max="40" step="1" value="20">
-        </div>
-        <canvas id="myChart"></canvas>
-        <div class="result">
-            <p>最終預估總資產</p>
-            <div id="finalTotal" class="result-val">NT$ 0</div>
-        </div>
+        <div class="strategy-box" id="insight"></div>
     </div>
 
     <script>
@@ -50,33 +52,64 @@
             const initSum = parseInt(document.getElementById('initSum').value);
             const monthly = parseInt(document.getElementById('monthly').value);
             const rate = parseFloat(document.getElementById('rate').value) / 100 / 12;
+            const cost = parseFloat(document.getElementById('cost').value) / 100 / 12;
+            const inflation = parseFloat(document.getElementById('inflation').value) / 100 / 12;
+            const taxRate = parseFloat(document.getElementById('tax').value) / 100;
             const years = parseInt(document.getElementById('years').value);
             
             document.getElementById('v1').innerText = initSum.toLocaleString();
             document.getElementById('v2').innerText = monthly.toLocaleString();
-            document.getElementById('v3').innerText = (rate*12*100).toFixed(1) + '%';
+            document.getElementById('v3').innerText = document.getElementById('rate').value + '%';
             document.getElementById('v4').innerText = years;
+            document.getElementById('v5').innerText = document.getElementById('cost').value + '%';
+            document.getElementById('v6').innerText = document.getElementById('inflation').value + '%';
+            document.getElementById('v7').innerText = document.getElementById('tax').value + '%';
 
-            let data = [];
+            let nominalData = [];
+            let realData = [];
             let labels = [];
-            let current = initSum;
+            let nominalCurrent = initSum;
+            let realCurrent = initSum;
+            let totalInvested = initSum;
+
             for (let i = 0; i <= years; i++) {
                 labels.push('第' + i + '年');
-                data.push(Math.round(current));
+                // 處理稅務邏輯：僅對獲利部分計算稅額（簡化模擬）
+                let profit = nominalCurrent - totalInvested;
+                let nominalAfterTax = nominalCurrent - (profit > 0 ? profit * taxRate : 0);
+                
+                nominalData.push(Math.round(nominalAfterTax));
+                // 實質購買力：將帳面金額除以通膨係數
+                realData.push(Math.round(nominalAfterTax / Math.pow(1 + inflation * 12, i)));
+
                 for (let m = 0; m < 12; m++) {
-                    current = (current + monthly) * (1 + rate);
+                    nominalCurrent = (nominalCurrent + monthly) * (1 + rate - cost);
+                    totalInvested += monthly;
                 }
             }
 
-            document.getElementById('finalTotal').innerText = 'NT$ ' + data[data.length-1].toLocaleString();
+            document.getElementById('finalTotal').innerText = 'NT$ ' + nominalData[nominalData.length-1].toLocaleString();
+            document.getElementById('realPower').innerText = 'NT$ ' + realData[realData.length-1].toLocaleString();
+
+            let insightText = "<b>[策略洞察]</b> ";
+            if (parseFloat(document.getElementById('inflation').value) >= parseFloat(document.getElementById('rate').value)) {
+                insightText += "<span style='color:red;'>警告：您的報酬率低於通膨，財富正在縮水中！</span>";
+            } else {
+                insightText += "雖然未來數字很大，但請參考「實質購買力」才是您真正的生活水準。";
+            }
+            document.getElementById('insight').innerHTML = insightText;
 
             if (myChart) myChart.destroy();
             myChart = new Chart(ctx, {
                 type: 'line',
                 data: {
                     labels: labels,
-                    datasets: [{ label: '財富成長曲線', data: data, borderColor: '#3498db', tension: 0.1, fill: true, backgroundColor: 'rgba(52, 152, 219, 0.1)' }]
-                }
+                    datasets: [
+                        { label: '帳面價值(稅後)', data: nominalData, borderColor: '#00796b', fill: false, tension: 0.2 },
+                        { label: '實質購買力', data: realData, borderColor: '#ff8a65', borderDash: [5, 5], fill: false, tension: 0.2 }
+                    ]
+                },
+                options: { responsive: true, maintainAspectRatio: false }
             });
         }
 
