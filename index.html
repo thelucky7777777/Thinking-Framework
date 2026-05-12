@@ -45,6 +45,7 @@
         const ctx = document.getElementById('myChart').getContext('2d');
         let myChart;
 
+    window.onload = function() {
         function update() {
             const initSum = parseInt(document.getElementById('initSum').value);
             const monthly = parseInt(document.getElementById('monthly').value);
@@ -111,6 +112,7 @@
 
         document.querySelectorAll('input').forEach(i => i.addEventListener('input', update));
         update();
+    };
     </script>
 </body>
 </html>
