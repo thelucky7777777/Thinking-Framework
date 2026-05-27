@@ -1,55 +1,280 @@
+<!-- ========================= -->
+<!-- index.html -->
+<!-- ========================= -->
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>思考框架</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <link rel="stylesheet" href="style.css">
+  <title>思考框架｜Thinking Frameworks</title>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Noto+Sans+TC:wght@300;400;500;700&family=Noto+Serif+TC:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
-    <header>
-        <h1>思考框架</h1>
-        <p>整理分析、研究與品質管理的重要方法</p>
-    </header>
+  <!-- ========================= -->
+  <!-- Header -->
+  <!-- ========================= -->
 
-    <main>
+  <header class="header">
 
-        <section class="card">
-            <h2>信度與效度</h2>
-            <p>
-                研究與量測中非常核心的概念。
-            </p>
+    <div class="logo">
+      Thinking <span>Frameworks</span>
+    </div>
 
-            <a href="pages/reliability-validity.html">
-                進入閱讀
-            </a>
-        </section>
+    <button id="themeToggle" class="theme-btn">
+      ☀️
+    </button>
 
-        <section class="card">
-            <h2>Gauge R&R</h2>
-            <p>
-                用於量測系統分析（MSA）的重要工具。
-            </p>
+  </header>
 
-            <a href="pages/gauge-randr.html">
-                進入閱讀
-            </a>
-        </section>
+  <!-- ========================= -->
+  <!-- Hero -->
+  <!-- ========================= -->
 
-        <section class="card">
-            <h2>定量與定性</h2>
-            <p>
-                比較 Quantitative 與 Qualitative 的研究方式。
-            </p>
+  <section class="hero">
 
-            <a href="pages/quantitative-qualitative.html">
-                進入閱讀
-            </a>
-        </section>
+    <div class="hero-tag">
+      RESEARCH · ANALYSIS · SYSTEM THINKING
+    </div>
 
-        <section class="card">
-            <h2>其他小框架</h2>
-            <p>
+    <h1 class="hero-title">
+      思考框架
+    </h1>
+
+    <p class="hero-subtitle">
+      建立研究、分析與決策的知識系統。
+      <br>
+      從信度與效度，到商業分析與系統思維。
+    </p>
+
+  </section>
+
+  <!-- ========================= -->
+  <!-- Main -->
+  <!-- ========================= -->
+
+  <main class="container">
+
+    <!-- ========================= -->
+    <!-- Category -->
+    <!-- ========================= -->
+
+    <section class="category-card">
+
+      <div class="category-label">
+        RESEARCH METHODOLOGY
+      </div>
+
+      <h2>
+        研究方法論
+      </h2>
+
+      <p class="category-desc">
+        研究設計、量測系統與方法論的核心概念。
+      </p>
+
+      <div class="subtopics">
+
+        <div class="subtopic">
+          信度 Reliability
+        </div>
+
+        <div class="subtopic">
+          效度 Validity
+        </div>
+
+        <div class="subtopic">
+          Gauge R&R
+        </div>
+
+        <div class="subtopic">
+          MSA
+        </div>
+
+        <div class="subtopic">
+          抽樣方法
+        </div>
+
+      </div>
+
+      <button class="enter-btn">
+        進入主題 →
+      </button>
+
+    </section>
+
+    <!-- ========================= -->
+    <!-- Category -->
+    <!-- ========================= -->
+
+    <section class="category-card">
+
+      <div class="category-label">
+        DATA ANALYSIS
+      </div>
+
+      <h2>
+        資料分析
+      </h2>
+
+      <p class="category-desc">
+        理解資料、觀察現象與建構分析模型。
+      </p>
+
+      <div class="subtopics">
+
+        <div class="subtopic">
+          定量研究
+        </div>
+
+        <div class="subtopic">
+          定性研究
+        </div>
+
+        <div class="subtopic">
+          混合研究
+        </div>
+
+        <div class="subtopic">
+          統計推論
+        </div>
+
+        <div class="subtopic">
+          因果分析
+        </div>
+
+      </div>
+
+      <button class="enter-btn">
+        進入主題 →
+      </button>
+
+    </section>
+
+    <!-- ========================= -->
+    <!-- Category -->
+    <!-- ========================= -->
+
+    <section class="category-card">
+
+      <div class="category-label">
+        BUSINESS ANALYSIS
+      </div>
+
+      <h2>
+        商業分析
+      </h2>
+
+      <p class="category-desc">
+        商業決策、問題拆解與策略分析框架。
+      </p>
+
+      <div class="subtopics">
+
+        <div class="subtopic">
+          SWOT
+        </div>
+
+        <div class="subtopic">
+          PDCA
+        </div>
+
+        <div class="subtopic">
+          5W1H
+        </div>
+
+        <div class="subtopic">
+          Root Cause Analysis
+        </div>
+
+        <div class="subtopic">
+          Decision Tree
+        </div>
+
+      </div>
+
+      <button class="enter-btn">
+        進入主題 →
+      </button>
+
+    </section>
+
+    <!-- ========================= -->
+    <!-- Category -->
+    <!-- ========================= -->
+
+    <section class="category-card">
+
+      <div class="category-label">
+        THINKING MODELS
+      </div>
+
+      <h2>
+        思考模型
+      </h2>
+
+      <p class="category-desc">
+        建立高層次邏輯推理與系統性思維能力。
+      </p>
+
+      <div class="subtopics">
+
+        <div class="subtopic">
+          第一性原理
+        </div>
+
+        <div class="subtopic">
+          系統思維
+        </div>
+
+        <div class="subtopic">
+          貝氏思維
+        </div>
+
+        <div class="subtopic">
+          反脆弱
+        </div>
+
+        <div class="subtopic">
+          Second-order Thinking
+        </div>
+
+      </div>
+
+      <button class="enter-btn">
+        進入主題 →
+      </button>
+
+    </section>
+
+  </main>
+
+  <!-- ========================= -->
+  <!-- Footer -->
+  <!-- ========================= -->
+
+  <footer class="footer">
+
+    <div>
+      Thinking Frameworks
+    </div>
+
+    <div class="footer-sub">
+      Research · Quality · Logic · Analysis
+    </div>
+
+  </footer>
+
+  <script src="script.js"></script>
+
+</body>
 </html>
