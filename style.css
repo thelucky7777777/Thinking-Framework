@@ -11,6 +11,7 @@
   --radius: 22px;
 }
 
+/* Dark Mode */
 body.dark {
   --bg: #1A1612;
   --surface: #2A2520;
@@ -23,6 +24,13 @@ body.dark {
   --shadow: 0 4px 24px rgba(0,0,0,0.45);
 }
 
+/* Global */
+* { 
+  box-sizing: border-box; 
+  margin: 0; 
+  padding: 0; 
+}
+
 body {
   font-family: 'Noto Sans TC', sans-serif;
   background: var(--bg);
@@ -30,9 +38,13 @@ body {
   line-height: 1.75;
 }
 
-h1, h2 { font-family: 'Noto Serif TC', serif; font-weight: 700; color: var(--ink); }
+h1, h2, h3 {
+  font-family: 'Noto Serif TC', serif;
+  font-weight: 700;
+  color: var(--ink);
+}
 
-/* Header */
+/* ==================== HEADER ==================== */
 .header {
   background: var(--ink);
   color: #FAF7F2;
@@ -46,15 +58,68 @@ h1, h2 { font-family: 'Noto Serif TC', serif; font-weight: 700; color: var(--ink
   border-bottom: 3px solid var(--accent);
 }
 
-.logo { font-family: 'DM Serif Display', serif; font-size: 1.7rem; }
-.logo span { color: var(--accent); font-style: italic; }
+body.dark .header {
+  color: #F5F0E8;           /* 深色模式更亮的文字 */
+}
+
+/* Logo */
+.logo {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.7rem;
+  letter-spacing: 0.02em;
+}
+
+.logo span {
+  color: var(--accent);
+  font-style: italic;
+}
+
+body.dark .logo {
+  color: #FAF7F2;
+}
 
 /* Progress */
-.progress-area { display: flex; align-items: center; gap: 12px; font-size: 0.85rem; }
-.progress-bar-outer { width: 160px; height: 6px; background: #444; border-radius: 999px; overflow: hidden; }
-.progress-bar-inner { height: 100%; background: var(--accent); width: 0%; transition: width 0.4s; }
+.progress-area {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 0.85rem;
+}
 
-/* Layout */
+.progress-bar-outer {
+  width: 160px;
+  height: 6px;
+  background: #444;
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.progress-bar-inner {
+  height: 100%;
+  background: var(--accent);
+  width: 0%;
+  transition: width 0.4s ease;
+}
+
+/* Theme Button */
+.theme-btn {
+  width: 48px;
+  height: 48px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.15);
+  border: none;
+  color: white;
+  font-size: 1.3rem;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.theme-btn:hover {
+  background: rgba(255,255,255,0.25);
+  transform: scale(1.05);
+}
+
+/* ==================== LAYOUT ==================== */
 .main-layout {
   display: flex;
   max-width: 1280px;
@@ -66,7 +131,7 @@ h1, h2 { font-family: 'Noto Serif TC', serif; font-weight: 700; color: var(--ink
   width: 280px;
   background: var(--surface);
   border-right: 1px solid var(--border);
-  padding: 40px 20px;
+  padding: 40px 24px;
   position: sticky;
   top: 70px;
   height: fit-content;
@@ -115,10 +180,63 @@ h1, h2 { font-family: 'Noto Serif TC', serif; font-weight: 700; color: var(--ink
   margin-bottom: 16px;
 }
 
-/* Responsive */
+/* ==================== ENTER BUTTON ==================== */
+.enter-btn {
+  background: var(--ink);
+  color: white;
+  padding: 15px 32px;
+  border-radius: 999px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s;
+  margin-top: auto;
+  align-self: flex-start;
+  border: none;
+}
+
+.enter-btn:hover {
+  background: var(--accent);
+  transform: translateY(-3px);
+}
+
+/* 深色模式按鈕修正（提升可讀性） */
+body.dark .enter-btn {
+  background: #F5F0E8;
+  color: #1A1612;
+}
+
+body.dark .enter-btn:hover {
+  background: var(--accent);
+  color: white;
+}
+
+/* ==================== RESPONSIVE ==================== */
 @media (max-width: 900px) {
-  .main-layout { flex-direction: column; }
-  .sidebar { width: 100%; position: relative; padding: 20px; }
-  .content-area { padding: 32px 24px; }
-  .card-icon { font-size: 2rem; }
+  .main-layout { 
+    flex-direction: column; 
+  }
+  .sidebar { 
+    width: 100%; 
+    position: relative; 
+    padding: 20px; 
+  }
+  .content-area { 
+    padding: 32px 24px; 
+  }
+  .card-icon { 
+    font-size: 2.1rem; 
+  }
+}
+
+@media (max-width: 480px) {
+  .header { 
+    padding: 18px 20px; 
+  }
+  .logo { 
+    font-size: 1.55rem; 
+  }
+  .progress-bar-outer { 
+    width: 120px; 
+  }
 }
