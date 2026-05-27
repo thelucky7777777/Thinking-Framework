@@ -13,32 +13,78 @@
   <!-- HEADER -->
   <header class="header">
     <div class="logo">思考框架 <span>Thinking</span></div>
-    <div class="progress-area">
-      <span class="progress-label">學習進度</span>
-      <div class="progress-bar-outer">
-        <div class="progress-bar-inner" id="progressBar"></div>
-      </div>
-      <span class="progress-pct" id="progressPct">0%</span>
-    </div>
     <button id="themeToggle" class="theme-btn">☀️</button>
   </header>
 
-  <div class="main-layout">
-    <!-- SIDEBAR -->
-    <aside class="sidebar">
-      <nav class="chapter-nav">
-        <button class="chapter-btn active" data-chapter="0">📐 研究方法論</button>
-        <button class="chapter-btn" data-chapter="1">📊 資料分析</button>
-        <button class="chapter-btn" data-chapter="2">🎯 商業分析</button>
-        <button class="chapter-btn" data-chapter="3">🧠 思考模型</button>
-      </nav>
-    </aside>
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-tag">RESEARCH · ANALYSIS · SYSTEM THINKING</div>
+    <h1 class="hero-title">思考框架</h1>
+    <p class="hero-subtitle">
+      建立高階研究、分析與決策的知識系統<br>
+      從方法論到第一性原理，系統化提升你的思考能力
+    </p>
+  </section>
 
-    <!-- MAIN CONTENT -->
-    <main class="content-area" id="contentArea">
-      <!-- Content will be loaded here via JS -->
-    </main>
-  </div>
+  <!-- MAIN CONTENT -->
+  <main class="container">
+    <!-- Category 1 -->
+    <section class="category-card">
+      <div class="category-label">RESEARCH METHODOLOGY</div>
+      <div class="card-icon">📐</div>
+      <h2>研究方法論</h2>
+      <p class="category-desc">研究設計、量測系統與方法論的核心概念。</p>
+      <div class="subtopics">
+        <div class="subtopic">信度 Reliability</div>
+        <div class="subtopic">效度 Validity</div>
+        <div class="subtopic">Gauge R&R</div>
+        <div class="subtopic">MSA</div>
+      </div>
+      <button class="enter-btn">進入主題 →</button>
+    </section>
+
+    <!-- Category 2 -->
+    <section class="category-card">
+      <div class="category-label">DATA ANALYSIS</div>
+      <div class="card-icon">📊</div>
+      <h2>資料分析</h2>
+      <p class="category-desc">理解資料、觀察現象與建構分析模型。</p>
+      <div class="subtopics">
+        <div class="subtopic">定量研究</div>
+        <div class="subtopic">定性研究</div>
+        <div class="subtopic">混合研究</div>
+      </div>
+      <button class="enter-btn">進入主題 →</button>
+    </section>
+
+    <!-- Category 3 -->
+    <section class="category-card">
+      <div class="category-label">BUSINESS ANALYSIS</div>
+      <div class="card-icon">🎯</div>
+      <h2>商業分析</h2>
+      <p class="category-desc">商業決策、問題拆解與策略分析框架。</p>
+      <div class="subtopics">
+        <div class="subtopic">SWOT</div>
+        <div class="subtopic">PDCA</div>
+        <div class="subtopic">5W1H</div>
+      </div>
+      <button class="enter-btn">進入主題 →</button>
+    </section>
+
+    <!-- Category 4 -->
+    <section class="category-card">
+      <div class="category-label">THINKING MODELS</div>
+      <div class="card-icon">🧠</div>
+      <h2>思考模型</h2>
+      <p class="category-desc">建立高層次邏輯推理與系統性思維能力。</p>
+      <div class="subtopics">
+        <div class="subtopic">第一性原理</div>
+        <div class="subtopic">系統思維</div>
+        <div class="subtopic">貝氏思維</div>
+      </div>
+      <button class="enter-btn">進入主題 →</button>
+    </section>
+  </main>
 
   <script src="script.js"></script>
 </body>
